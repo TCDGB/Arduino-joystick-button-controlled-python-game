@@ -1,0 +1,55 @@
+#define downOutput 13
+#define upOutput 12
+#define leftOutput 11
+#define rightOutput 10
+#define deadZone 100
+int verticalValue; //variable to store vertical reading.
+int horizontalValue;
+int horizontalCenter;
+int verticalCenter;
+int buttonValue;
+const int joyXPin = A1;
+const int joyYPin = A0;
+const int buttonPin= A2;
+void setup(){
+horizontalCenter = analogRead(joyXPin);
+verticalCenter = analogRead(joyYPin);
+pinMode(upOutput, OUTPUT); //set up LED pin as output
+digitalWrite(upOutput, LOW); //and turn it off.
+pinMode(downOutput, OUTPUT); //set up LED pin as output
+digitalWrite(downOutput, LOW);
+pinMode(leftOutput, OUTPUT); //set up LED pin as output
+digitalWrite(leftOutput, LOW);
+pinMode(rightOutput, OUTPUT); //set up LED pin as output
+digitalWrite(rightOutput, LOW);
+Serial.begin(9600);
+}
+void loop(){
+Serial.print(joyXPin);
+Serial.print(" ");
+Serial.print(joyYPin);
+Serial.print(" ");
+Serial.println(buttonPin);
+delay(100);
+verticalValue = analogRead(joyYPin); //read the current UD value.
+horizontalValue = analogRead(joyXPin);
+buttonValue = analogRead(buttonPin);
+if(verticalValue > verticalCenter + deadZone){ //if it is high, turn on up LED.
+digitalWrite(upOutput, HIGH);
+}else if(verticalValue < verticalCenter - deadZone){
+  digitalWrite(downOutput, HIGH);
+}else{
+digitalWrite(upOutput, LOW); //otherwise, turn it off.
+digitalWrite(downOutput, LOW);
+}
+
+if(horizontalValue > horizontalCenter + deadZone){
+  digitalWrite(rightOutput, HIGH);
+  }else if(horizontalValue < horizontalCenter - deadZone){
+    digitalWrite(leftOutput, HIGH);
+  }else{
+    digitalWrite(leftOutput, LOW);
+    digitalWrite(rightOutput, LOW);
+  }
+delay(10); //read the value every 10 ms.
+}
